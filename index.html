@@ -9,11 +9,31 @@
         #multiple_sliders {
             float: left;
         }
+
         #multiple_sliders_info {
             float:left;
+            font-family: Arial, Helvetica, sans-serif;
             width: 400px;
             min-height: 300px;
             background: lightgrey;
+        }
+        #multiple_sliders_info .slider * {
+            display: inline-block;
+        }
+        #multiple_sliders_info .value {
+            width: 230px;
+            text-align: right;
+            font-size: 48px;
+            font-weight: bold;
+        }
+        #multiple_sliders_info .box {
+            width: 12px;
+            height: 8px;
+            margin: 0 20px;
+        }
+
+        .handle {
+            cursor: pointer;
         }
     </style>
     <script src="slider.js"></script>
@@ -25,6 +45,9 @@
             dash: 6,
             gap: 2,
             rotate: 0,
+            min_value: 0,
+            max_value: 360,
+            stepping: 0,
             color: "#977fa1",
             gap_color: "#5f3b6f",
             bg_color: "#d7d7d7",

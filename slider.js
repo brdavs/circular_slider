@@ -170,6 +170,7 @@ function slider(id, data) {
 
     // Fill the sliders up with 1 slider for now
     data.forEach(function(item) {
+        item.class = item.name.toLowerCase().replace(" ", "_");
         sliders.push(
             mk_slider(item)
         );
@@ -195,22 +196,38 @@ function slider(id, data) {
     element.style.height = element.style.width;
 
     // Create Infobox ----------------------------------------------------------
+    infobox_element = null;
     this.infobox = function(id) {
-        var container = document.getElementById(id);
-
+        infobox_element = document.getElementById(id)
         sliders.forEach(function(slider) {
+            var dd = slider.slider_data.data;
             var el = ce({
                 el: "div",
-                attr: {
-                    class: slider.slider_data.data.name.replace(" ", "_").toLowerCase()
-                },
-                content: 'AAAA'
+                attr: {class: ["slider", dd.class].join(" ")},
+                content: ["value", "box", "name"].map(function(klass) {
+                    switch(klass){
+                        case "value":
+                            content = "$ " + dd.min_value.toFixed(2); break;
+                        case "name":
+                            content = dd.name; break;
+                        default:
+                            content = '';
+                    }
+                    return {
+                        el: "div", 
+                        attr: {
+                            class: klass,
+                            style: klass=="box" ? "background-color:"+dd.gap_color+";" : false
+                        },
+                        content: content
+                    };
+                })
             });
-            container.appendChild(
-                el
-            );
+            infobox_element.appendChild(el);
         });
+        return infobox_element;
     }
+
 
     // Movement and actions ----------------------------------------------------
 
@@ -236,12 +253,11 @@ function slider(id, data) {
         );
 
         // Set up for rotation
-        handle.addEventListener('mousedown', function(e) {
-            sl.slider_data.rotating =  true;
-        }, false);
-        handle.addEventListener('touchstart', function(e) {
-            sl.slider_data.rotating =  true;
-        }, false);
+        "mousedown touchstart".split(' ').forEach(function(action) {
+            handle.addEventListener(action, function(e) {
+                sl.slider_data.rotating =  true;
+            });
+        });
 
         // Jump to location
         sl.addEventListener('mousedown', function(e) {
@@ -260,8 +276,10 @@ function slider(id, data) {
     }, false);
 
     // Track and fix positions suring movement
-    document.addEventListener('mousemove', move_handle, false);
-    document.addEventListener('touchmove', move_handle, false);
+    "mousemove touchmove".split(" ").forEach(function() {
+        document.addEventListener('mousemove', move_handle);
+    });
+    
 
     /**
      * Acts on handle being moved
@@ -309,7 +327,7 @@ function slider(id, data) {
                 cartesian_position.y - dd.size
             );
 
-            // Opening the arcs
+            // Opening/closing the arcs
             var arcs = sl.getElementsByClassName("arc");
             for(var i=0; i<arcs.length; i++) {
                 arc_data = describeArc(
@@ -321,6 +339,11 @@ function slider(id, data) {
                 )
                 arcs[i].setAttribute("d", arc_data);
             }
+
+            // Updating data in info box
+            if(!infobox_element) return;
+            var el_value = infobox_element.querySelector("."+dd.class+" .value");
+            el_value.textContent = "$ " + (Math.round(d.angle * 100) / 100).toFixed(2);
 
         });
     }
@@ -339,7 +362,7 @@ function ce(data) {
     
     // Create node and ad a namespace to it
     var node = document.createElement(data.el)
-    node = document.createElementNS("http://www.w3.org/2000/svg", data.el);
+    node = data.el!="div" ? document.createElementNS("http://www.w3.org/2000/svg", data.el) : node;
 
     // Get all attributes to the node
     for(k in data.attr) {
