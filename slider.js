@@ -159,7 +159,6 @@ function slider(id, data) {
         // Return a group of sliders and handle
         var out = ce({
             el: "g",
-            attr: {class: "slider"},
             content: arcs.concat(handle)
         });
 
@@ -183,22 +182,35 @@ function slider(id, data) {
         el: "svg",
         attr: {
             width: data[0].size, 
-            height: data[0].size, 
-            id: data.id, 
+            height: data[0].size,
             viewbox:"0 0 "+[data[0].size, data[0].size].join(' ')
         },
         content: this.sliders
     });
     var svg = this.svg = svg;
 
-    // Append to an element and size that element accordingly
     var element = document.getElementById(id)
     element.appendChild(svg);
     element.style.width = data[0].size+"px";
     element.style.height = element.style.width;
 
-    var XXXXX = document.getElementById('test')
+    // Create Infobox ----------------------------------------------------------
+    this.infobox = function(id) {
+        var container = document.getElementById(id);
 
+        sliders.forEach(function(slider) {
+            var el = ce({
+                el: "div",
+                attr: {
+                    class: slider.slider_data.data.name.replace(" ", "_").toLowerCase()
+                },
+                content: 'AAAA'
+            });
+            container.appendChild(
+                el
+            );
+        });
+    }
 
     // Movement and actions ----------------------------------------------------
 

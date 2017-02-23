@@ -5,6 +5,17 @@
     <title>title</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        #multiple_sliders {
+            float: left;
+        }
+        #multiple_sliders_info {
+            float:left;
+            width: 400px;
+            min-height: 300px;
+            background: lightgrey;
+        }
+    </style>
     <script src="slider.js"></script>
     <script>
         var s1d = {
@@ -16,8 +27,8 @@
             rotate: 0,
             color: "#977fa1",
             gap_color: "#5f3b6f",
-            bg_color: "#d5d7d7",
-            bg_gap_color: "#bfc1c2",
+            bg_color: "#d7d7d7",
+            bg_gap_color: "#c8c8c8",
         }
 
         var s2d = JSON.parse(JSON.stringify(s1d));
@@ -45,15 +56,19 @@
         s5d.size = 100;
 
         document.addEventListener("DOMContentLoaded", function () {
-            // var sliders = new slider('sliders', [s1d, s2d, s3d, s4d, s5d]);
-            var sliders = new slider('multiple_sliders', [s1d, s2d, s3d, s4d, s5d]);
-            console.log(sliders)
+            var slider_object = new slider('multiple_sliders', [s1d, s2d, s3d, s4d, s5d]);
+            var infobox = new slider_object.infobox('multiple_sliders_info');
+
         }, false);
+
+
     </script>
 </head>
 
 <body>
+    <div id="multiple_sliders_info"></div>
     <div id="multiple_sliders"></div>
+    
 </body>
 
 </html>
