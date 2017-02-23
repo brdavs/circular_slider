@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="170222-2320_slider.js"></script>
+    <script>
+        var s1d = {
+            id: 'slider1',
+            size: 300,
+            width: 17,
+            dash: 100,
+            gap: 2  ,
+            rotate: 0,
+            color: "#977fa1",
+            gap_color: "#5f3b6f",
+            bg_color: "#d5d7d7",
+            bg_gap_color: "#bfc1c2",
+        }
+
+        var s2d = JSON.parse(JSON.stringify(s1d));
+        s2d.color = "#59a5ce";
+        s2d.gap_color = "#0075b4";
+        s2d.dash = s1d.dash * s1d.size / s2d.size;
+        s2d.size = 250;
+
+        var s3d = JSON.parse(JSON.stringify(s1d));
+        s3d.color = "#59bd65";
+        s3d.gap_color = "#009912";
+        s3d.dash = s2d.dash * s2d.size / s3d.size;
+        s3d.size = 200;
+
+        var s4d = JSON.parse(JSON.stringify(s1d));
+        s4d.color = "#f7a96c";
+        s4d.gap_color = "#f37b1d";
+        s4d.dash = s3d.dash * s3d.size / s4d.size;
+        s4d.size = 150;
+
+        var s5d = JSON.parse(JSON.stringify(s1d));
+        s5d.color = "#fe8385";
+        s5d.gap_color = "#fd4144";
+        s5d.dash = s4d.dash * s4d.size / s5d.size;
+        s5d.size = 100;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // var sliders = new slider('sliders', [s1d, s2d, s3d, s4d, s5d]);
+            var sliders = new slider('sliders', [s1d, s2d, s3d, s4d, s5d]);
+        }, false);
+    </script>
+</head>
+
+<body>
+    <div id="sliders"></div>
+
+</body>
+
+</html>

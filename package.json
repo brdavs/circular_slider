@@ -1,0 +1,11 @@
+{
+  "name": "circular_slider",
+  "version": "0.0.1",
+  "description": "Standalone reusable circular multi slider class",
+  "main": "index.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "author": "Toni Anžlovar",
+  "license": "ISC"
+}
