@@ -96,10 +96,10 @@ function slider(id, data) {
     function mk_slider(data) {
         // Array for holding arcs
         var arcs = [
-            data.bg_color,
             data.bg_gap_color,
-            data.color,
-            data.gap_color
+            data.bg_color,
+            data.gap_color,
+            data.color
         ];
         
         // Replace every color with it's own arc
@@ -217,7 +217,7 @@ function slider(id, data) {
                         el: "div", 
                         attr: {
                             class: klass,
-                            style: klass=="box" ? "background-color:"+dd.gap_color+";" : false
+                            style: klass=="box" ? "background-color:"+dd.color+";" : false
                         },
                         content: content
                     };
