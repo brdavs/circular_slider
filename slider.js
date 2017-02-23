@@ -2,7 +2,7 @@
  * Creates a single instance of a slider
  * @param {String} id - Id of the html container to host the SVG drawing
  * @param {Object} data - Constructor for the multi slider
- * @returns {object} Returns the built SVG dom node.
+ * @return {object} Returns the built SVG dom node.
  */
 function slider(id, data) {
 
@@ -28,7 +28,7 @@ function slider(id, data) {
      * @param [Object] a, b, c - Coordinates of the first point
      * @param [Object] a.x, b.x, c.x - Integer x axis
      * @param [Object] a.y, b.y, c.y - Integer y axis
-     * @returns {Integer} Returns angle between 3 points in degrees
+     * @return {Integer} Returns angle between 3 points in degrees
      */
     function find_angle(a,b,c) {
         var ab = Math.sqrt(Math.pow(b.x-a.x,2)+ Math.pow(b.y-a.y,2));    
@@ -45,7 +45,7 @@ function slider(id, data) {
      * @param [Integer] cY - Y axis of thecircle
      * @param [Integer] radius - Radius of the circle
      * @param [Integer] degrees - 
-     * @returns {Object} Returns object with cartesian coordinates of a point
+     * @return {Object} Returns object with cartesian coordinates of a point
      */
     function polarToCartesian(cX, cY, radius, degrees) {
         var radians = (degrees-90) * Math.PI / 180.0;
@@ -62,7 +62,7 @@ function slider(id, data) {
      * @param {Integer} radius - Eadius of the arc
      * @param {Integer} startAngle - Start od the arc
      * @param {Integer} endAngle - End of the arc
-     * @returns {String} Returns d attribute of a SVG arc
+     * @return {String} Returns d attribute of a SVG arc
      */
     function describeArc(x, y, radius, startAngle, endAngle){
         var start = polarToCartesian(x, y, radius, endAngle);
@@ -78,7 +78,7 @@ function slider(id, data) {
     /**
      * Get position for center of element on html canvas
      * @param {Object} el - Html object already in DOM
-     * @returns {Object} Returns coordinates of the center of the object
+     * @return {Object} Returns coordinates of the center of the object
      */
     function pos(el) {
         var rect = el.getBoundingClientRect();
@@ -91,7 +91,7 @@ function slider(id, data) {
     /**
      * Builds a single slider
      * @param {Object} data - Object constructor
-     * @returns {Object} Html object with additional data
+     * @return {Object} Html object with additional data
      */
     function mk_slider(data) {
         // Array for holding arcs
@@ -113,7 +113,7 @@ function slider(id, data) {
                     class: i < 2 ? 'circle circle_'+i : 'arc arc_'+i,
                     "stroke-width": data.width,
                     "stroke-dasharray": Math.abs(i % 2) == 1 ? [
-                        (data.size*Math.PI/data.dash)-data.gap,
+                        data.dash,
                         data.gap
                     ] : "",
                     d: describeArc(
@@ -197,6 +197,8 @@ function slider(id, data) {
     element.style.width = data[0].size+"px";
     element.style.height = element.style.width;
 
+    var XXXXX = document.getElementById('test')
+
 
     // Movement and actions ----------------------------------------------------
 
@@ -249,6 +251,12 @@ function slider(id, data) {
     document.addEventListener('mousemove', move_handle, false);
     document.addEventListener('touchmove', move_handle, false);
 
+    /**
+     * Acts on handle being moved
+     * @param {Object} e - Event object
+     * @param {Object} Html object with additional data
+     * @return {undefined}
+     */
     function move_handle(e, sl) {
 
         // Mouse position
@@ -270,7 +278,6 @@ function slider(id, data) {
             ['mousedown', 'touchmove'].indexOf(e.type) == -1) {
                 return;
             };
-            
 
             // Get angle and other stuff
             var hnd = sl.getElementsByClassName("handle")[0];
@@ -283,10 +290,6 @@ function slider(id, data) {
                 dd.size,
                 dd.size/2-dd.width/2-2, angle
             );
-
-
-            if(angle>359 && mouse.x>element.style.width) sl.slider_data.halt;
-
 
             // Moving the handle
             hnd.transform.baseVal.getItem(0).setTranslate(

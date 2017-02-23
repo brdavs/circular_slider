@@ -8,11 +8,11 @@
     <script src="slider.js"></script>
     <script>
         var s1d = {
-            id: 'slider1',
+            name: 'Transportation',
             size: 300,
-            width: 17,
-            dash: 100,
-            gap: 2  ,
+            width: 16,
+            dash: 6,
+            gap: 2,
             rotate: 0,
             color: "#977fa1",
             gap_color: "#5f3b6f",
@@ -21,39 +21,39 @@
         }
 
         var s2d = JSON.parse(JSON.stringify(s1d));
+        s2d.name = 'Food';
         s2d.color = "#59a5ce";
         s2d.gap_color = "#0075b4";
-        s2d.dash = s1d.dash * s1d.size / s2d.size;
         s2d.size = 250;
 
         var s3d = JSON.parse(JSON.stringify(s1d));
+        s3d.name = 'Insurance';
         s3d.color = "#59bd65";
         s3d.gap_color = "#009912";
-        s3d.dash = s2d.dash * s2d.size / s3d.size;
         s3d.size = 200;
 
         var s4d = JSON.parse(JSON.stringify(s1d));
+        s4d.name = 'Entertainment';
         s4d.color = "#f7a96c";
         s4d.gap_color = "#f37b1d";
-        s4d.dash = s3d.dash * s3d.size / s4d.size;
         s4d.size = 150;
 
         var s5d = JSON.parse(JSON.stringify(s1d));
+        s5d.name = 'Health care';
         s5d.color = "#fe8385";
         s5d.gap_color = "#fd4144";
-        s5d.dash = s4d.dash * s4d.size / s5d.size;
         s5d.size = 100;
 
         document.addEventListener("DOMContentLoaded", function () {
             // var sliders = new slider('sliders', [s1d, s2d, s3d, s4d, s5d]);
-            var sliders = new slider('sliders', [s1d, s2d, s3d, s4d, s5d]);
+            var sliders = new slider('multiple_sliders', [s1d, s2d, s3d, s4d, s5d]);
+            console.log(sliders)
         }, false);
     </script>
 </head>
 
 <body>
-    <div id="sliders"></div>
-
+    <div id="multiple_sliders"></div>
 </body>
 
 </html>
