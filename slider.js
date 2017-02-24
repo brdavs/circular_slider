@@ -6,10 +6,32 @@
  */
 function slider(id, data) {
 
-    // Add data to self
-    // for(k in data) {
-    //     if(data.hasOwnProperty(k)) this[k] = data[k];
-    // }
+    var default_data = {
+        name: 'Transportation',
+        size: 100,
+        width: 10,
+        dash: 6,
+        gap: 2,
+        rotate: 0,
+        min_value: 100,
+        max_value: 200,
+        step: 0,
+        gap_color: "#977fa1",
+        color: "#5f3b6f",
+        bg_gap_color: "#d7d7d7",
+        bg_color: "#c8c8c8",
+    };
+
+    // Fill missing data for every default element
+    data = data.map(function(item) {
+        for(k in default_data) {
+            if(default_data.hasOwnProperty(k) && !item.hasOwnProperty(k)) {
+                item[k] = default_data[k];
+            }
+        }
+        return item;
+    });
+    console.log(data)
 
     // Reverse sort by size (larger first)
     data = data.sort(function(a, b) {
@@ -198,6 +220,7 @@ function slider(id, data) {
     // Create Infobox ----------------------------------------------------------
     infobox_element = null;
     this.infobox = function(id) {
+        
         infobox_element = document.getElementById(id)
         sliders.forEach(function(slider) {
             var dd = slider.slider_data.data;
@@ -279,12 +302,27 @@ function slider(id, data) {
     "mousemove touchmove".split(" ").forEach(function() {
         document.addEventListener('mousemove', move_handle);
     });
-    
+
+    /**
+     * Snaps to the nearest angle by step
+     * @param {(float|integer)} angle Current cursor angle
+     * @param {(float|integer)} min Minimal possible value on circular slider
+     * @param {(float|integer)} max Maximal possible value on circular slider
+     * @return {(float|integer)} step Stepping (minmal viable step)
+     * @return {(float|integer)} Angle that we need to snap to
+     */
+    function snap_to_angle(angle, min, max, step) {
+        if(step==0) return angle;
+        var nsteps = (max-min) / step;
+        var angle_step = 360 / nsteps;
+        var snap_step = Math.round(angle/angle_step)
+        return angle_step * snap_step
+    }
 
     /**
      * Acts on handle being moved
-     * @param {Object} e - Event object
-     * @param {Object} Html object with additional data
+     * @param {object} e Event object
+     * @param {object} sl Html object with additional data
      * @return {undefined}
      */
     function move_handle(e, sl) {
@@ -310,16 +348,26 @@ function slider(id, data) {
             };
 
             // Get angle and other stuff
+            // Handle element
             var hnd = sl.getElementsByClassName("handle")[0];
+            // Mouse position
             sl.slider_data.m = {x: mouse.x, y: mouse.y };
+            // Shortcuts
             var d = sl.slider_data;
             var dd = sl.slider_data.data;
-            var angle = sl.slider_data.angle = find_angle(d.a, d.c, d.m); 
+            // Find angle of the mouse
+            var mouse_angle = sl.slider_data.angle = find_angle(d.a, d.c, d.m);
+            // Calculate snapped angle
+            var angle = snap_to_angle(mouse_angle, dd.min_value, dd.max_value, dd.step);
+            // Calculate cartesian coordinates of handle
             var cartesian_position = sl.slider_data.handle_pos = polarToCartesian(
                 dd.size,
                 dd.size,
-                dd.size/2-dd.width/2-2, angle
+                dd.size/2-dd.width/2-2,
+                angle
             );
+            var percent = 1 / 360 * angle ;
+            var value = sl.slider_data.value = (dd.max_value-dd.min_value)*percent+dd.min_value ;
 
             // Moving the handle
             hnd.transform.baseVal.getItem(0).setTranslate(
@@ -334,7 +382,7 @@ function slider(id, data) {
                     max_size/2,
                     max_size/2,
                     dd.size/2-dd.width/2-2,
-                    angle,
+                    angle==360 ? angle-0.1 : angle, // because of 360 snaps to 0
                     0
                 )
                 arcs[i].setAttribute("d", arc_data);
@@ -343,7 +391,7 @@ function slider(id, data) {
             // Updating data in info box
             if(!infobox_element) return;
             var el_value = infobox_element.querySelector("."+dd.class+" .value");
-            el_value.textContent = "$ " + (Math.round(d.angle * 100) / 100).toFixed(2);
+            el_value.textContent = "$ " + sl.slider_data.value.toFixed(2);
 
         });
     }
@@ -352,10 +400,10 @@ function slider(id, data) {
 
 /**
  * Creates a SVG node structure from static data
- * @param {object} data - constructor object
- * @param {string} data.el - tag name to construct
- * @param {Object} data.attr - attributes in name value pairs
- * @param {String|Object|String[]|Object[]} data.content - A similar constructor or array of them
+ * @param {object} data Constructor object
+ * @param {string} data.el Tag name to construct
+ * @param {object} data.attr Attributes in name value pairs
+ * @param {(string|object|string[]|object[])} data.content A similar constructor or array of them
  * @returns {object} Returns the built SVG dom node.
  */
 function ce(data) {

@@ -45,9 +45,9 @@
             dash: 6,
             gap: 2,
             rotate: 0,
-            min_value: 0,
-            max_value: 360,
-            stepping: 0,
+            min_value: 100,
+            max_value: 500,
+            step: 0,
             gap_color: "#977fa1",
             color: "#5f3b6f",
             bg_gap_color: "#d7d7d7",
@@ -58,12 +58,14 @@
         s2d.name = 'Food';
         s2d.gap_color = "#59a5ce";
         s2d.color = "#0075b4";
+        s2d.step = 20;
         s2d.size = 250;
 
         var s3d = JSON.parse(JSON.stringify(s1d));
         s3d.name = 'Insurance';
         s3d.gap_color = "#59bd65";
         s3d.color = "#009912";
+        s3d.step = 10;
         s3d.size = 200;
 
         var s4d = JSON.parse(JSON.stringify(s1d));
@@ -82,7 +84,7 @@
             var slider_object = new slider('multiple_sliders', [s1d, s2d, s3d, s4d, s5d]);
             var infobox = new slider_object.infobox('multiple_sliders_info');
 
-        }, false);
+        });
 
 
     </script>
