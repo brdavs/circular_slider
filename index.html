@@ -52,8 +52,6 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             var slider_object = new slider('multiple_sliders', [s1d, s2d, s3d, s4d, s5d]);
-            var infobox = new slider_object.infobox('multiple_sliders_info');
-
         });
 
 
@@ -63,7 +61,34 @@
 <body>
 
     <div class="slider_container clear">
-        <div id="multiple_sliders_info"></div>
+        <div id="multiple_sliders_info">
+            <div class="slider transportation">
+                <div class="value">$ <span class="multiple_sliders-transportation-value"></span></div>
+                <div class="box multiple_sliders-transportation-color"></div>
+                <div class="name multiple_sliders-transportation-name"></div>
+            </div>
+            <div class="slider food">
+                <div class="value">$ <span class="multiple_sliders-food-value"></span></div>
+                <div class="box multiple_sliders-food-color"></div>
+                <div class="name multiple_sliders-food-name"></div>
+            </div>
+            <div class="slider insurance">
+                <div class="value">$ <span class="multiple_sliders-insurance-value"></span></div>
+                <div class="box multiple_sliders-insurance-color"></div>
+                <div class="name multiple_sliders-insurance-name"></div>
+            </div>
+            <div class="slider entertainment">
+                <div class="value">$ <span class="multiple_sliders-entertainment-value"></span></div>
+                <div class="box multiple_sliders-entertainment-color"></div>
+                <div class="name multiple_sliders-entertainment-name"></div>
+            </div>
+            <div class="slider health_care">
+                <div class="value">$ <span class="multiple_sliders-health_care-value"></span></div>
+                <div class="box multiple_sliders-health_care-color"></div>
+                <div class="name multiple_sliders-health_care-name"></div>
+            </div>
+        </div>
+
         <div id="multiple_sliders"></div>
     </div>
     
