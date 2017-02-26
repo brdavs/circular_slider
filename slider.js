@@ -30,7 +30,7 @@ function slider(id, data) {
      * Populating missing data with default values for every element
      * @type {array}
      */
-    data = data.map(function(item) {
+    var data = data.map(function(item) {
         for(k in default_data) {
             if(default_data.hasOwnProperty(k) && !item.hasOwnProperty(k)) {
                 item[k] = default_data[k];
@@ -43,9 +43,10 @@ function slider(id, data) {
      * Reverse sorted data (largest first)
      * @type {array}
      */
-    data = data.sort(function(a, b) {
-        return a.size < b.size ? 1 : -1;
-        if(a.size == b.size) return 0;
+    var data = data.sort(function(a, b) {
+        var out = 0;
+        var out = a.size < b.size ? 1 : -1;
+        return out;
     });
 
     /**
@@ -268,11 +269,7 @@ function slider(id, data) {
         d.c = pos(slider_container);
         d.a = pos(handle);
         d.m = pos(handle);
-        d.angle =  find_angle(
-            d.a,
-            d.c,
-            d.m
-        );
+        d.angle =  find_angle(d.a, d.c, d.m);
         d.handle_pos = polarToCartesian(
             d.data.size,
             d.data.size,
@@ -281,33 +278,33 @@ function slider(id, data) {
         sl.slider_data = d;
 
         // Set up for rotation
-        "mousedown touchstart".split(' ').forEach(function(action) {
-            handle.addEventListener(action, function(e) {
-                sl.slider_data.c = pos(slider_container);
-                sl.slider_data.rotating =  true;
-            });
+        handle.addEventListener("mousedown", function(e) {
+            sl.slider_data.c = pos(slider_container);
+            sl.slider_data.rotating =  true;
         });
 
-        // Jump to location
-        sl.addEventListener('mousedown', function(e) {
-            sl.slider_data.c = pos(slider_container);
-            move_handle(e, sl);
-        }, false);
-
+        // Jump to location ()
+        "mousedown touchstart touchmove".split(' ').forEach(function(action) {
+            sl.addEventListener(action, function(e) {
+                sl.slider_data.c = pos(slider_container);
+                move_handle(e, sl);
+            });
+        });
         return sl;
     });
 
-    // On mouse up stop rotation
-    document.addEventListener('mouseup', function(e) {
-        sliders = sliders.map(function(sl) {
-            sl.slider_data.rotating = false;
-            return sl;
-        });
-    }, false);
 
-    // Track and fix positions suring movement
-    "mousemove touchmove".split(" ").forEach(function() {
-        document.addEventListener('mousemove', move_handle);
+    // Track and fix positions during mouse movement
+    document.addEventListener('mousemove', move_handle);
+
+    // On mouse up stop rotation
+    "mouseup touchend".split(' ').forEach(function(action) {
+        document.addEventListener(action, function(e) {
+            sliders = sliders.map(function(sl) {
+                sl.slider_data.rotating = false;
+                return sl;
+            });
+        });
     });
 
     /**
@@ -334,17 +331,23 @@ function slider(id, data) {
     function update_dom_data(sl) {
         var d = sl.slider_data;
         var dd = sl.slider_data.data;
-        ["name", "angle", "value", "color"].forEach(function(item) {
-            var class_name = [id, dd.class, item].join("-");
+        var items = {
+            name: dd.name,
+            angle: (d.angle ? d.angle : 0).toFixed(2),
+            value: (d.value ? d.value : 0).toFixed(2),
+            color: dd.color
+        }
+        for(k in items) {
+            var class_name = [id, dd.class, k].join("-");
             var dom_elements = document.getElementsByClassName(class_name);
             for(var i=0; i<dom_elements.length; i++) {
-                if(item=="name") dom_elements[i].textContent = dd.name;
-                if(item=="angle") dom_elements[i].textContent = d[item] ? d[item].toFixed(2) : (0).toFixed(2);
-                if(item=="value") dom_elements[i].textContent = d[item] ? d[item].toFixed(2) : dd.min_value.toFixed(2);
-                if(item=="color") dom_elements[i].style.backgroundColor = dd[item];
+                if(k=='color') {
+                    dom_elements[i].style.backgroundColor = items[k];
+                    continue;
+                }
+                dom_elements[i].textContent = items[k]
             }
-        });
-        console.log(sl.slider_data);
+        }
     }
 
     /**
@@ -354,6 +357,7 @@ function slider(id, data) {
      * @return {undefined}
      */
     function move_handle(e, sl) {
+        console.log(e.type)
 
         // Mouse position
         if(e.type=="touchmove") {

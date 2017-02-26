@@ -44,7 +44,7 @@
 
 @media (max-width: 768px) {
     .slider_container {
-        max-width: 340px;
+        max-width: 300px;
         display: inline-block;
     }
     #multiple_sliders_info {
