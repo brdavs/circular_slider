@@ -357,7 +357,6 @@ function slider(id, data) {
      * @return {undefined}
      */
     function move_handle(e, sl) {
-        console.log(e.type)
 
         // Mouse position
         if(e.type=="touchmove") {
