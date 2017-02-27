@@ -11,7 +11,7 @@ function slider(id, data) {
      * @type {object}
      */
     var default_data = {
-        name: 'Transportation',
+        name: 'Whatever',
         size: 100,
         width: 10,
         dash: 6,
@@ -45,7 +45,7 @@ function slider(id, data) {
      */
     var data = data.sort(function(a, b) {
         var out = 0;
-        var out = a.size < b.size ? 1 : -1;
+        out = a.size < b.size ? 1 : -1;
         return out;
     });
 
